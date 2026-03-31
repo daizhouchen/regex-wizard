@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="569" height="198" viewBox="0 0 569 198">
+  <rect width="100%" height="100%" fill="#FAFAFA"/>
+  <circle cx="24.0" cy="80.0" r="6" fill="#333333"/>
+  <line x1="30.0" y1="80.0" x2="40.0" y2="80.0" stroke="#333333" stroke-width="2"/>
+  <rect x="40.0" y="64.0" width="140.8" height="32.0" rx="6" fill="#27AE60"/>
+  <text x="110.4" y="80.0" fill="#FFFFFF" font-size="13" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">[a-zA-Z0-9._%+-]</text>
+  <rect x="90.4" y="100.0" width="40.0" height="20.0" rx="10" fill="#E67E22"/>
+  <text x="110.4" y="110.0" fill="#FFFFFF" font-size="11" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">+</text>
+  <line x1="180.8" y1="80.0" x2="190.8" y2="80.0" stroke="#333333" stroke-width="2"/>
+  <polygon points="188.8,76.0 196.8,80.0 188.8,84.0" fill="#333333"/>
+  <rect x="190.8" y="64.0" width="40.0" height="32.0" rx="6" fill="#4A90D9"/>
+  <text x="210.8" y="80.0" fill="#FFFFFF" font-size="13" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">@</text>
+  <line x1="230.8" y1="80.0" x2="240.8" y2="80.0" stroke="#333333" stroke-width="2"/>
+  <polygon points="238.8,76.0 246.8,80.0 238.8,84.0" fill="#333333"/>
+  <rect x="240.8" y="64.0" width="117.4" height="32.0" rx="6" fill="#27AE60"/>
+  <text x="299.5" y="80.0" fill="#FFFFFF" font-size="13" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">[a-zA-Z0-9.-]</text>
+  <rect x="279.5" y="100.0" width="40.0" height="20.0" rx="10" fill="#E67E22"/>
+  <text x="299.5" y="110.0" fill="#FFFFFF" font-size="11" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">+</text>
+  <line x1="358.2" y1="80.0" x2="368.2" y2="80.0" stroke="#333333" stroke-width="2"/>
+  <polygon points="366.2,76.0 374.2,80.0 366.2,84.0" fill="#333333"/>
+  <rect x="368.2" y="64.0" width="40.0" height="32.0" rx="6" fill="#4A90D9"/>
+  <text x="388.2" y="80.0" fill="#FFFFFF" font-size="13" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">.</text>
+  <line x1="408.2" y1="80.0" x2="418.2" y2="80.0" stroke="#333333" stroke-width="2"/>
+  <polygon points="416.2,76.0 424.2,80.0 416.2,84.0" fill="#333333"/>
+  <rect x="418.2" y="64.0" width="78.4" height="32.0" rx="6" fill="#27AE60"/>
+  <text x="457.4" y="80.0" fill="#FFFFFF" font-size="13" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">[a-zA-Z]</text>
+  <rect x="433.8" y="100.0" width="47.2" height="20.0" rx="10" fill="#E67E22"/>
+  <text x="457.4" y="110.0" fill="#FFFFFF" font-size="11" font-family="monospace, Consolas, Courier New" text-anchor="middle" dominant-baseline="central">{2,}</text>
+  <line x1="496.6" y1="80.0" x2="508.6" y2="80.0" stroke="#333333" stroke-width="2"/>
+  <circle cx="514.6" cy="80.0" r="6" fill="none" stroke="#333333" stroke-width="2"/>
+  <circle cx="514.6" cy="80.0" r="3" fill="#333333"/>
+  <text x="40.0" y="24" fill="#333" font-size="14" font-family="monospace">Regex: [a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}</text>
+  <rect x="40.0" y="158.0" width="14.0" height="14.0" rx="3" fill="#4A90D9"/>
+  <text x="60.0" y="169.0" fill="#333" font-size="11" font-family="sans-serif">Literal</text>
+  <rect x="136.0" y="158.0" width="14.0" height="14.0" rx="3" fill="#27AE60"/>
+  <text x="156.0" y="169.0" fill="#333" font-size="11" font-family="sans-serif">Char Class</text>
+  <rect x="256.0" y="158.0" width="14.0" height="14.0" rx="3" fill="#E67E22"/>
+  <text x="276.0" y="169.0" fill="#333" font-size="11" font-family="sans-serif">Quantifier</text>
+  <rect x="376.0" y="158.0" width="14.0" height="14.0" rx="3" fill="#8E44AD"/>
+  <text x="396.0" y="169.0" fill="#333" font-size="11" font-family="sans-serif">Group</text>
+  <rect x="456.0" y="158.0" width="14.0" height="14.0" rx="3" fill="#E74C3C"/>
+  <text x="476.0" y="169.0" fill="#333" font-size="11" font-family="sans-serif">Anchor</text>
+</svg>

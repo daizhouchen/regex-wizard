@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regex Tester - regex-wizard</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --surface2: #0f3460;
+    --accent: #e94560;
+    --accent2: #533483;
+    --text: #eee;
+    --text-muted: #999;
+    --match-bg: rgba(233, 69, 96, 0.3);
+    --match-border: #e94560;
+    --group-bg: rgba(83, 52, 131, 0.3);
+    --success: #27ae60;
+    --fail: #e74c3c;
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 1.6rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .panel-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  /* Regex input */
+  .regex-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .regex-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 1rem;
+    background: var(--bg);
+    border: 2px solid var(--surface2);
+    border-radius: var(--radius);
+    color: var(--accent);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .regex-input:focus { border-color: var(--accent); }
+
+  /* Flags */
+  .flags {
+    display: flex;
+    gap: 4px;
+  }
+  .flag-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--surface2);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text-muted);
+    font-family: monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .flag-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(233, 69, 96, 0.1);
+  }
+
+  /* Test area */
+  .test-area {
+    position: relative;
+    width: 100%;
+  }
+
+  .test-backdrop, .test-input {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 14px;
+    width: 100%;
+    border-radius: var(--radius);
+    border: 2px solid var(--surface2);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .test-backdrop {
+    position: absolute;
+    top: 0; left: 0;
+    background: var(--bg);
+    color: transparent;
+    pointer-events: none;
+    overflow: auto;
+    min-height: 200px;
+  }
+
+  .test-input {
+    position: relative;
+    background: transparent;
+    color: var(--text);
+    outline: none;
+    resize: vertical;
+    min-height: 200px;
+  }
+  .test-input:focus { border-color: var(--accent); }
+
+  mark {
+    background: var(--match-bg);
+    border-bottom: 2px solid var(--match-border);
+    color: transparent;
+    border-radius: 2px;
+  }
+
+  /* Results */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .results-grid { grid-template-columns: 1fr; }
+  }
+
+  .match-count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent);
+  }
+
+  .match-list {
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.85rem;
+  }
+
+  .match-item {
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    background: var(--bg);
+  }
+
+  .match-item .index { color: var(--text-muted); margin-right: 8px; }
+  .match-item .value { color: var(--accent); }
+  .match-item .groups { color: var(--accent2); font-size: 0.8rem; }
+
+  /* Test cases */
+  .test-cases {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .test-cases { grid-template-columns: 1fr; }
+  }
+
+  .test-case {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    background: var(--bg);
+    font-family: monospace;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .test-case:hover { background: var(--surface2); }
+
+  .test-case .indicator {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .test-case .indicator.pass { background: var(--success); }
+  .test-case .indicator.fail { background: var(--fail); }
+  .test-case .indicator.pending { background: var(--text-muted); }
+
+  .test-case .expected {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .error-msg {
+    color: var(--fail);
+    font-size: 0.85rem;
+    padding: 8px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Regex Wizard Tester</h1>
+  <p class="subtitle">Interactive regex testing with real-time highlighting</p>
+
+  <!-- Regex Input -->
+  <div class="panel">
+    <div class="panel-title">Regular Expression</div>
+    <div class="regex-row">
+      <input type="text" class="regex-input" id="regexInput"
+             value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+             placeholder="Enter regex pattern..." spellcheck="false">
+      <div class="flags">
+        <div class="flag-btn active" data-flag="g" title="global">g</div>
+        <div class="flag-btn" data-flag="i" title="case insensitive">i</div>
+        <div class="flag-btn" data-flag="m" title="multiline">m</div>
+        <div class="flag-btn" data-flag="s" title="dotAll">s</div>
+      </div>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <!-- Test Text -->
+  <div class="panel">
+    <div class="panel-title">Test String</div>
+    <div class="test-area">
+      <div class="test-backdrop" id="backdrop"><div id="highlights"></div></div>
+      <textarea class="test-input" id="testInput" spellcheck="false"
+                placeholder="Enter text to test against...">Contact us at support@example.com or sales@company.org
+Visit https://www.example.com for more info
+My phone number is 13812345678
+Invalid email: @missing-user.com
+Another valid: user.name+tag@domain.co.uk</textarea>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="panel">
+    <div class="results-grid">
+      <div>
+        <div class="panel-title">Match Count</div>
+        <div class="match-count" id="matchCount">0</div>
+      </div>
+      <div>
+        <div class="panel-title">Matches &amp; Groups</div>
+        <div class="match-list" id="matchList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test Cases -->
+  <div class="panel">
+    <div class="panel-title">Test Cases</div>
+    <div class="test-cases" id="testCases"></div>
+  </div>
+</div>
+
+<script>
+// ── Configuration (pre-populated by regex-wizard) ──
+const DEFAULT_TEST_CASES = [
+  // Positive (should match)
+  { text: "user@example.com",           expect: true,  label: "simple email" },
+  { text: "name.tag+alias@domain.co.uk", expect: true,  label: "complex email" },
+  { text: "test123@sub.domain.org",      expect: true,  label: "numeric user" },
+  { text: "a@b.cc",                      expect: true,  label: "minimal email" },
+  { text: "user%name@company.io",        expect: true,  label: "percent in user" },
+  // Negative (should not match)
+  { text: "@no-user.com",               expect: false, label: "missing user" },
+  { text: "user@.com",                  expect: false, label: "missing domain" },
+  { text: "user@com",                   expect: false, label: "no TLD dot" },
+  { text: "plaintext",                  expect: false, label: "no @ sign" },
+  { text: "user@domain.c",              expect: false, label: "TLD too short" },
+];
+
+// ── State ──
+const regexInput  = document.getElementById("regexInput");
+const testInput   = document.getElementById("testInput");
+const highlights  = document.getElementById("highlights");
+const backdrop    = document.getElementById("backdrop");
+const matchCount  = document.getElementById("matchCount");
+const matchList   = document.getElementById("matchList");
+const testCasesEl = document.getElementById("testCases");
+const errorMsg    = document.getElementById("errorMsg");
+const flagBtns    = document.querySelectorAll(".flag-btn");
+
+function getFlags() {
+  let f = "";
+  flagBtns.forEach(btn => { if (btn.classList.contains("active")) f += btn.dataset.flag; });
+  return f;
+}
+
+function buildRegex() {
+  try {
+    const r = new RegExp(regexInput.value, getFlags());
+    errorMsg.style.display = "none";
+    return r;
+  } catch (e) {
+    errorMsg.textContent = e.message;
+    errorMsg.style.display = "block";
+    return null;
+  }
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function updateHighlights() {
+  const regex = buildRegex();
+  const text = testInput.value;
+  if (!regex || !text) {
+    highlights.innerHTML = escapeHtml(text || "") + "\n";
+    matchCount.textContent = "0";
+    matchList.innerHTML = "";
+    updateTestCases(null);
+    return;
+  }
+
+  // Find all matches
+  let matches = [];
+  let m;
+  // Need global flag for matchAll
+  const gRegex = new RegExp(regex.source, regex.flags.includes("g") ? regex.flags : regex.flags + "g");
+  const iter = text.matchAll(gRegex);
+  for (const match of iter) {
+    matches.push(match);
+  }
+
+  // Build highlighted text
+  let result = "";
+  let lastIndex = 0;
+  for (const match of matches) {
+    const start = match.index;
+    const end = start + match[0].length;
+    result += escapeHtml(text.slice(lastIndex, start));
+    result += "<mark>" + escapeHtml(text.slice(start, end)) + "</mark>";
+    lastIndex = end;
+  }
+  result += escapeHtml(text.slice(lastIndex)) + "\n";
+  highlights.innerHTML = result;
+
+  // Update count
+  matchCount.textContent = matches.length;
+
+  // Update match list
+  let listHtml = "";
+  matches.forEach((match, i) => {
+    let groupsHtml = "";
+    if (match.length > 1) {
+      const groups = Array.from(match).slice(1).filter(g => g !== undefined);
+      if (groups.length > 0) {
+        groupsHtml = '<div class="groups">Groups: ' + groups.map(g => '"' + escapeHtml(g) + '"').join(", ") + "</div>";
+      }
+    }
+    if (match.groups) {
+      const named = Object.entries(match.groups).filter(([,v]) => v !== undefined);
+      if (named.length > 0) {
+        groupsHtml += '<div class="groups">Named: ' +
+          named.map(([k,v]) => k + '="' + escapeHtml(v) + '"').join(", ") + "</div>";
+      }
+    }
+    listHtml += `<div class="match-item"><span class="index">#${i+1}</span><span class="value">${escapeHtml(match[0])}</span>${groupsHtml}</div>`;
+  });
+  matchList.innerHTML = listHtml;
+
+  updateTestCases(regex);
+}
+
+function updateTestCases(regex) {
+  let html = "";
+  DEFAULT_TEST_CASES.forEach(tc => {
+    let status = "pending";
+    if (regex) {
+      // Use a fresh regex (no global state issue)
+      const testRe = new RegExp(regex.source, regex.flags.replace("g", ""));
+      const matched = testRe.test(tc.text);
+      const correct = matched === tc.expect;
+      status = correct ? "pass" : "fail";
+    }
+    html += `<div class="test-case" data-text="${escapeHtml(tc.text)}">
+      <div class="indicator ${status}"></div>
+      <span>${escapeHtml(tc.text)}</span>
+      <span class="expected">${tc.expect ? "should match" : "should NOT match"}</span>
+    </div>`;
+  });
+  testCasesEl.innerHTML = html;
+
+  // Click to load test case into textarea
+  testCasesEl.querySelectorAll(".test-case").forEach(el => {
+    el.addEventListener("click", () => {
+      testInput.value = el.dataset.text;
+      updateHighlights();
+    });
+  });
+}
+
+// ── Sync scroll ──
+testInput.addEventListener("scroll", () => {
+  backdrop.scrollTop = testInput.scrollTop;
+  backdrop.scrollLeft = testInput.scrollLeft;
+});
+
+// ── Events ──
+regexInput.addEventListener("input", updateHighlights);
+testInput.addEventListener("input", updateHighlights);
+flagBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("active");
+    updateHighlights();
+  });
+});
+
+// ── Init ──
+updateHighlights();
+</script>
+</body>
+</html>
