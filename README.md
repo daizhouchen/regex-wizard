@@ -2,7 +2,7 @@
 
 > Describe what you want to match in plain language. Get a regex, a railroad diagram, and a live tester.
 
-A [Claude Code](https://claude.ai/code) skill that generates regular expressions from natural language descriptions, with color-coded SVG railroad diagrams and an interactive browser-based test page.
+An [OpenClaw](https://openclawskill.ai) skill that generates regular expressions from natural language descriptions, with color-coded SVG railroad diagrams and an interactive browser-based test page.
 
 ## Features
 
@@ -20,12 +20,12 @@ A [Claude Code](https://claude.ai/code) skill that generates regular expressions
 ## Installation
 
 ```bash
-claude skill add daizhouchen/regex-wizard
+npx @anthropic-ai/claw@latest skill add daizhouchen/regex-wizard
 ```
 
 ## How It Works
 
-1. Claude interprets your natural language description
+1. OpenClaw interprets your natural language description
 2. Generates the regex with strict and lenient variants
 3. `scripts/railroad.py` renders an SVG railroad diagram
 4. Generates an interactive HTML tester with pre-populated test cases
